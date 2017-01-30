@@ -9,6 +9,12 @@ minúsculas, guiones bajos y/o dígitos.
 Las funciones pueden tener 0 o más argumentos separados por comas, los cuales pueden ser expresiones.
 Ejemplos de expresiones válidas:
 
+###How to run
+```
+from parser import parser
+parser()
+```
+
 ###Sample input:
 ```
 a + _e $

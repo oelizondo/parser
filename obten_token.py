@@ -14,8 +14,9 @@ LRP = 103  # Delimitador: paréntesis izquierdo
 RRP = 104  # Delimitador: paréntesis derecho
 END = 105  # Fin de la entrada
 ERR = 200  # Error léxico: palabra desconocida
-COM = 108
-VAR = 109
+COM = 108  # coma delimitador
+VAR = 109  # Variable
+
 
 # // Matriz de transiciones
 # //               dig   op   (    )  raro  esp   .    $    ,    _  letras
@@ -63,6 +64,15 @@ def filtro(c):
         return 6
     elif c == '$': # fin de entrada
         return 7
+
+    elif    c == 'a' or c == 'b' or c == 'c' or c == 'd' or c == 'e' or \
+            c == 'f' or c == 'g' or c == 'h' or c == 'i' or c == 'j' or \
+	        c == 'k' or c == 'l' or c == 'm' or c == 'n' or c == 'o' or \
+	        c == 'p' or c == 'q' or c == 'r' or c == 's' or c == 't' or \
+	        c == 'u' or c == 'v' or c == 'w' or c == 'x' or c == 'y' or \
+	        c == 'z': #Alphabet
+        return 10;
+
     else: # caracter raro
         return 4
 
@@ -104,6 +114,12 @@ def obten_token():
         elif edo == END:
             print "Fin de expresion"
             return END
+        elif edo == VAR:
+            print "Variable", lexema
+            return VAR
+        elif edo ==  COM:
+            print "Delimitador , "
+            return COM
         else:
             leer = False # el último caracter no es raro
             print "ERROR! palabra ilegal", lexema
