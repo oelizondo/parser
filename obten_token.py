@@ -14,11 +14,12 @@ LRP = 103  # Delimitador: paréntesis izquierdo
 RRP = 104  # Delimitador: paréntesis derecho
 END = 105  # Fin de la entrada
 ERR = 200  # Error léxico: palabra desconocida
-
+COM = 108
+VAR = 109
 
 # // Matriz de transiciones
 # //               dig   op   (    )  raro  esp   .    $    ,    _  letras
-# int MT[7][11] = {{  1, 102, 105, 106,   4,   0,   4, 107, 108, 5 ,    5 },   // edo 0 - edo inicial
+# int MT[7][11] = {{  1, 102, 105, 106,   4,   0,   4, 107, 108, 5 ,    5 },    // edo 0 - edo inicial
 # 				   {  1, 100, 100, 100, 100, 100,   2, 100, 100, 100,  100 },   // edo 1 - digitos enteros
 # 				   {  3, 200, 200, 200,   4, 200,   4, 200, 200, 100,  100 },   // edo 2 - primer decimal flotante
 #                  {  3, 101, 101, 101, 101, 101,   4, 101, 101, 100,  100 },   // edo 3 - decimales restantes flotante
@@ -30,12 +31,14 @@ ERR = 200  # Error léxico: palabra desconocida
 # [renglón, columna] = [estado no final, transición]
 # Estados > 99 son finales (ACEPTORES)
 # Caso especial: Estado 200 = ERROR
-#      dig   op   (    )  raro  esp  .   $
-MT = [[  1, OPB, LRP, RRP,   4,   0, 4, END], # edo 0 - estado inicial
-      [  1, INT, INT, INT, INT, INT, 2, INT], # edo 1 - dígitos enteros
-      [  3, ERR, ERR, ERR,   4, ERR, 4, ERR], # edo 2 - primer decimal flotante
-      [  3, FLT, FLT, FLT, FLT, FLT, 4, FLT], # edo 3 - decimales restantes flotante
-      [ERR, ERR, ERR, ERR,   4, ERR, 4, ERR]] # edo 4 - estado de error
+#      dig   op   (    )  raro  esp  .   $   ,    -  letras
+MT = [[  1, OPB, LRP, RRP,   4,   0, 4, END, 108, 5,    5  ], # edo 0 - estado inicial
+      [  1, INT, INT, INT, INT, INT, 2, INT, INT, INT, INT ], # edo 1 - dígitos enteros
+      [  3, ERR, ERR, ERR,   4, ERR, 4, ERR, ERR, INT, INT ], # edo 2 - primer decimal flotante
+      [  3, FLT, FLT, FLT, FLT, FLT, 4, FLT, FLT, INT, INT ], # edo 3 - decimales restantes flotante
+      [ERR, ERR, ERR, ERR,   4, ERR, 4, ERR, ERR, ERR, ERR ], # edo 4 - estado de error
+      [  5, ERR, ERR, ERR, ERR, VAR, ERR, ERR, VAR, 5, 5 ]]   # edo 5 - letras, digitos, _
+
 
 # Filtro de caracteres: regresa el número de columna de la matriz de transiciones
 # de acuerdo al caracter dado
