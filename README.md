@@ -9,7 +9,7 @@ minúsculas, guiones bajos y/o dígitos.
 Las funciones pueden tener 0 o más argumentos separados por comas, los cuales pueden ser expresiones.
 Ejemplos de expresiones válidas:
 
-###Sample input
+###Sample input:
 ```
 a + _e $
 5.3 * (2 + x2) $
@@ -17,7 +17,7 @@ y5(2, hola, 3.4, 3 * 5) $
 2 / (ratio(4) – t_int(2.3, 1.5)) $
 ```
 
-###Sample output
+###Sample output:
 
 ```
 

@@ -31,13 +31,15 @@ VAR = 109
 # [renglón, columna] = [estado no final, transición]
 # Estados > 99 son finales (ACEPTORES)
 # Caso especial: Estado 200 = ERROR
-#      dig   op   (    )  raro  esp  .   $   ,    -  letras
-MT = [[  1, OPB, LRP, RRP,   4,   0, 4, END, 108, 5,    5  ], # edo 0 - estado inicial
-      [  1, INT, INT, INT, INT, INT, 2, INT, INT, INT, INT ], # edo 1 - dígitos enteros
-      [  3, ERR, ERR, ERR,   4, ERR, 4, ERR, ERR, INT, INT ], # edo 2 - primer decimal flotante
-      [  3, FLT, FLT, FLT, FLT, FLT, 4, FLT, FLT, INT, INT ], # edo 3 - decimales restantes flotante
-      [ERR, ERR, ERR, ERR,   4, ERR, 4, ERR, ERR, ERR, ERR ], # edo 4 - estado de error
-      [  5, ERR, ERR, ERR, ERR, VAR, ERR, ERR, VAR, 5, 5 ]]   # edo 5 - letras, digitos, _
+#      dig   op   (    )  raro  esp   .     $   ,    -  letras
+MT = [[  1, OPB, LRP, RRP,   4,   0,  4 , END, 108,  5 ,  5  ], # edo 0 - estado inicial
+      [  1, INT, INT, INT, INT, INT,  2 , INT, INT, INT, INT ], # edo 1 - dígitos enteros
+      [  3, ERR, ERR, ERR,   4, ERR,  4 , ERR, ERR, INT, INT ], # edo 2 - primer decimal flotante
+      [  3, FLT, FLT, FLT, FLT, FLT,  4 , FLT, FLT, INT, INT ], # edo 3 - decimales restantes flotante
+      [ERR, ERR, ERR, ERR,   4, ERR,  4 , ERR, ERR, ERR, ERR ], # edo 4 - estado de error
+      [  5, ERR, ERR, ERR, ERR, VAR, ERR, ERR, VAR,  5 ,  5  ], # edo 5 - letras, digitos, _
+      [  5, ERR, ERR, ERR, FLT, ERR, ERR, END, ERR,  5 ,  5  ]] # edo 6 - estado de error
+
 
 
 # Filtro de caracteres: regresa el número de columna de la matriz de transiciones
