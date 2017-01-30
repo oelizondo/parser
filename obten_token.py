@@ -15,6 +15,17 @@ RRP = 104  # Delimitador: paréntesis derecho
 END = 105  # Fin de la entrada
 ERR = 200  # Error léxico: palabra desconocida
 
+
+# // Matriz de transiciones
+# //               dig   op   (    )  raro  esp   .    $    ,    _  letras
+# int MT[7][11] = {{  1, 102, 105, 106,   4,   0,   4, 107, 108, 5 ,    5 },   // edo 0 - edo inicial
+# 				   {  1, 100, 100, 100, 100, 100,   2, 100, 100, 100,  100 },   // edo 1 - digitos enteros
+# 				   {  3, 200, 200, 200,   4, 200,   4, 200, 200, 100,  100 },   // edo 2 - primer decimal flotante
+#                  {  3, 101, 101, 101, 101, 101,   4, 101, 101, 100,  100 },   // edo 3 - decimales restantes flotante
+# 				   {200, 200, 200, 200,   4, 200,   4, 200, 200, 200,  200 },   // edo 4 - edo de error
+# 				   {  5, 200, 200, 200, 200, 109, 200, 200, 109,   5,    5 },   // edo 5 - letras, digitos, _
+# 				   {  5, 200, 200, 200, 101, 200, 200, 107, 200,   5,    5 }};  // edo 6 - decimales restantes flotante
+
 # Matriz de transiciones: codificación del AFD
 # [renglón, columna] = [estado no final, transición]
 # Estados > 99 son finales (ACEPTORES)
@@ -65,34 +76,30 @@ def obten_token():
             else: _leer = True
             edo = MT[edo][filtro(_c)]
             if edo < 100 and edo != 0: lexema += _c
-        if edo == INT:    
+        if edo == INT:
             _leer = False # ya se leyó el siguiente caracter
             print "Entero", lexema
             return INT
-        elif edo == FLT:   
+        elif edo == FLT:
             _leer = False # ya se leyó el siguiente caracter
             print "Flotante", lexema
             return FLT
-        elif edo == OPB:   
+        elif edo == OPB:
             lexema += _c  # el último caracter forma el lexema
             print "Operador", lexema
             return OPB
-        elif edo == LRP:   
+        elif edo == LRP:
             lexema += _c  # el último caracter forma el lexema
             print "Delimitador", lexema
             return LRP
-        elif edo == RRP:  
+        elif edo == RRP:
             lexema += _c  # el último caracter forma el lexema
             print "Delimitador", lexema
             return RRP
         elif edo == END:
             print "Fin de expresion"
             return END
-        else:   
+        else:
             leer = False # el último caracter no es raro
             print "ERROR! palabra ilegal", lexema
             return ERR
-            
-        
-    
-
