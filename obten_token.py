@@ -17,6 +17,7 @@ ERR = 200  # Error léxico: palabra desconocida
 COM = 108  # coma delimitador
 VAR = 109  # Variable
 
+ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 # // Matriz de transiciones
 # //               dig   op   (    )  raro  esp   .    $    ,    _  letras
@@ -33,12 +34,12 @@ VAR = 109  # Variable
 # Estados > 99 son finales (ACEPTORES)
 # Caso especial: Estado 200 = ERROR
 #      dig   op   (    )  raro  esp   .     $   ,    -  letras
-MT = [[  1, OPB, LRP, RRP,   4,   0,  4 , END, 108,  5 ,  5  ], # edo 0 - estado inicial
+MT = [[  1, OPB, LRP, RRP,   4,   0,  4 , END, COM,  5 ,  5  ], # edo 0 - estado inicial
       [  1, INT, INT, INT, INT, INT,  2 , INT, INT, INT, INT ], # edo 1 - dígitos enteros
       [  3, ERR, ERR, ERR,   4, ERR,  4 , ERR, ERR, INT, INT ], # edo 2 - primer decimal flotante
       [  3, FLT, FLT, FLT, FLT, FLT,  4 , FLT, FLT, INT, INT ], # edo 3 - decimales restantes flotante
       [ERR, ERR, ERR, ERR,   4, ERR,  4 , ERR, ERR, ERR, ERR ], # edo 4 - estado de error
-      [  5, ERR, ERR, ERR, ERR, VAR, ERR, ERR, VAR,  5 ,  5  ], # edo 5 - letras, digitos, _
+      [  5, VAR, VAR, VAR, VAR, VAR, ERR, VAR, VAR,  5 ,  5  ], # edo 5 - letras, digitos, _
       [  5, ERR, ERR, ERR, FLT, ERR, ERR, END, ERR,  5 ,  5  ]] # edo 6 - estado de error
 
 
@@ -51,8 +52,7 @@ def filtro(c):
        c == '3' or c == '4' or c == '5' or \
        c == '6' or c == '7' or c == '8' or c == '9': # dígitos
         return 0
-    elif c == '+' or c == '-' or c == '*' or \
-         c == '/': # operadores
+    elif c == '+' or c == '–' or c == '-' or c == '*' or c == '/': # operadores
         return 1
     elif c == '(': # delimitador (
         return 2
@@ -64,15 +64,12 @@ def filtro(c):
         return 6
     elif c == '$': # fin de entrada
         return 7
-
-    elif    c == 'a' or c == 'b' or c == 'c' or c == 'd' or c == 'e' or \
-            c == 'f' or c == 'g' or c == 'h' or c == 'i' or c == 'j' or \
-	        c == 'k' or c == 'l' or c == 'm' or c == 'n' or c == 'o' or \
-	        c == 'p' or c == 'q' or c == 'r' or c == 's' or c == 't' or \
-	        c == 'u' or c == 'v' or c == 'w' or c == 'x' or c == 'y' or \
-	        c == 'z': #Alphabet
-        return 10;
-
+    elif c == '_':
+        return 9
+    elif c in ALPHABET: #Alphabet
+        return 10
+    elif c == ',':
+        return 8
     else: # caracter raro
         return 4
 
@@ -115,6 +112,7 @@ def obten_token():
             print "Fin de expresion"
             return END
         elif edo == VAR:
+            _leer = False
             print "Variable", lexema
             return VAR
         elif edo ==  COM:

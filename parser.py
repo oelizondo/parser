@@ -35,6 +35,9 @@ def exp():
     if token == scanner.INT or token == scanner.FLT:
         match(token) # reconoce Constantes
         exp1()
+    elif token == scanner.VAR :
+        match(token)
+        exp1()
     elif token == scanner.LRP:
         match(token) # reconoce Delimitador (
         exp()
@@ -45,10 +48,12 @@ def exp():
 
 # Modulo auxiliar para reconocimiento de expresiones
 def exp1():
-    if token == scanner.OPB:
+    if token == scanner.OPB or token == scanner.COM:
         match(token) # reconoce operador
         exp()
         exp1()
+    elif token == scanner.LRP:
+        exp()
 
 # Termina con un mensaje de error
 def error(mensaje):
